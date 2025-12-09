@@ -1,4 +1,3 @@
-
 DROP DATABASE IF EXISTS etl_test;
 CREATE DATABASE etl_test;
 USE etl_test;
@@ -17,6 +16,7 @@ CREATE TABLE orders (
 CREATE TABLE order_items (
   id INT AUTO_INCREMENT PRIMARY KEY,
   order_id INT,
+  item VARCHAR(50),
   quantity INT
 );
 
