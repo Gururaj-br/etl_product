@@ -7,12 +7,11 @@ class DB_Config:
 
 class Report_Config:
     HEADERS = {
-        "customer_name": "Customer",
+        "customer_id": "Customer",
         "age": "Age",
-        "item": "Item",
-        "quantity": "Quantity",
+        "item_name": "Item",
+        "total_quantity": "Quantity",
     }
 
     REPORT_FOLDER_PATH = "reports/"
     REPORT_FILE_NAME = "etl_report_{}.csv"
-

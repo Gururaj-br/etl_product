@@ -6,16 +6,27 @@ from config import *
 class PandasEngine(Engine):
     def __init__(self, conn):
         super().__init__(conn)
+        self.min_age = 18
+        self.max_age = 35
 
     def run(self):
         print("Running Pandas Engine")
-        customers = pd.read_sql("SELECT * FROM customers", self.conn.connection)
+        customer = pd.read_sql("SELECT * FROM customer", self.conn.connection)
+        items = pd.read_sql("SELECT * FROM items", self.conn.connection)
+        sales = pd.read_sql("SELECT * FROM sales", self.conn.connection)
         orders = pd.read_sql("SELECT * FROM orders", self.conn.connection)
-        order_items = pd.read_sql("SELECT * FROM order_items", self.conn.connection)
 
-        filtered_customers = customers[(customers['age'] >= 18) & (customers['age'] <= 35)]
-        merged = filtered_customers.merge(orders, on='customer_id').merge(order_items, on='order_id')
-        grouped = merged.groupby(['customer_id', 'age', 'item']).agg({'quantity': 'sum'}).reset_index()
+        filtered_customers = customer[(customer['age'] >= self.min_age) & (customer['age'] <= self.max_age)]
+        
+        merged = filtered_customers.merge(sales, on='customer_id', how='left')
+        merged = merged.merge(orders, on='sales_id', how='left')
+        merged = merged.merge(items, on='item_id', how='left')
+        
+        merged['quantity'] = merged['quantity'].fillna(0).astype(int)
+        
+        grouped = merged.groupby(['customer_id', 'age', 'item_name']).agg({'quantity': 'sum'}).reset_index()
         grouped = grouped.rename(columns={'quantity': 'total_quantity'})
+        
         filtered = grouped[grouped['total_quantity'] > 0]
+        
         return filtered.to_dict('records')

@@ -17,7 +17,7 @@ def main():
 
         db_conn = DBConnection(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT)
     except Exception as e:
-        print(f"Database db_connection error: {e}")
+        print(f"Database connection error: {e}")
         sys.exit(1)
         
     pipeline = Pipeline("customer_etl", db_conn)
@@ -30,23 +30,14 @@ def main():
         engine = SqlEngine(db_conn)
 
     try:
-        try:
-            pipeline.process_start("extract_transform")
-            data = engine.run()
-            pipeline.process_success("extract_transform")
-        except Exception as e:
-            pipeline.process_fail("extract_transform")
-            raise e
+        pipeline.process_start("extract_transform")
+        data = engine.run()
+        pipeline.process_success("extract_transform")
 
-        try:    
-            pipeline.process_start("load")
-            rep_obj = ReportWriter(data)
-            rep_obj.write_report()
-            pipeline.process_success("load")
-        except Exception as e:
-            pipeline.process_fail("load")
-            raise e
-        
+        pipeline.process_start("load")
+        rep_obj = ReportWriter(data, engine_type)
+        rep_obj.write_report()
+        pipeline.process_success("load")
     except Exception as e:
         pipeline.process_fail("extract_transform")
         pipeline.process_fail("load")
