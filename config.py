@@ -1,7 +1,7 @@
 class DB_Config:
     DB_HOST = "localhost"
-    DB_USER = "root"
-    DB_PASSWORD = "root"
+    DB_USER = "etl_user"
+    DB_PASSWORD = ""
     DB_NAME = "etl_test"
     DB_PORT = 3306
 

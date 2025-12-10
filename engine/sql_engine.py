@@ -19,7 +19,7 @@ class SqlEngine(Engine):
         GROUP BY c.customer_id, c.age, oi.item
         HAVING SUM(oi.quantity) > 0
         """
-        with self.conn.cursor(pymysql.cursors.DictCursor) as cursor:
+        with self.conn.connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(query)
             results = cursor.fetchall()
         return results

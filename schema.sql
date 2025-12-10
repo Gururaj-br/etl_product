@@ -2,22 +2,29 @@ DROP DATABASE IF EXISTS etl_test;
 CREATE DATABASE etl_test;
 USE etl_test;
 
-CREATE TABLE customers (
+CREATE TABLE customer (
   customer_id INT PRIMARY KEY,
-  name VARCHAR(100),
   age INT
 );
 
-CREATE TABLE orders (
-  order_id INT PRIMARY KEY,
-  customer_id INT
+CREATE TABLE items (
+  item_id INT PRIMARY KEY,
+  item_name VARCHAR(100)
 );
 
-CREATE TABLE order_items (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  order_id INT,
-  item VARCHAR(50),
-  quantity INT
+CREATE TABLE sales (
+  sales_id INT PRIMARY KEY AUTO_INCREMENT,
+  customer_id INT,
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+);
+
+CREATE TABLE orders (
+  order_id INT PRIMARY KEY AUTO_INCREMENT,
+  sales_id INT,
+  item_id INT,
+  quantity INT,
+  FOREIGN KEY (sales_id) REFERENCES sales(sales_id),
+  FOREIGN KEY (item_id) REFERENCES items(item_id)
 );
 
 CREATE TABLE pipeline_run (

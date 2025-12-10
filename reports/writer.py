@@ -12,7 +12,7 @@ class ReportWriter:
 
         self.output_file = os.path.join(
             self.report_folder, 
-            Report_Config.REPORT_FILE_NAME.format(pd.Timestamp.now().strftime("%Y%m%d_%H:%M%S"))
+            Report_Config.REPORT_FILE_NAME.format(pd.Timestamp.now().strftime("%Y%m%d_%H%M%S"))
         )
 
     def write_report(self):
