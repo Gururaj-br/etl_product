@@ -30,14 +30,23 @@ def main():
         engine = SqlEngine(db_conn)
 
     try:
-        pipeline.process_start("extract_transform")
-        data = engine.run()
-        pipeline.process_success("extract_transform")
+        try:
+            pipeline.process_start("extract_transform")
+            data = engine.run()
+            pipeline.process_success("extract_transform")
+        except Exception as e:
+            pipeline.process_fail("extract_transform")
+            raise e
 
-        pipeline.process_start("load")
-        rep_obj = ReportWriter(data, engine_type)
-        rep_obj.write_report()
-        pipeline.process_success("load")
+        try:    
+            pipeline.process_start("load")
+            rep_obj = ReportWriter(data, engine_type)
+            rep_obj.write_report()
+            pipeline.process_success("load")
+        except Exception as e:
+            pipeline.process_fail("load")
+            raise e
+        
     except Exception as e:
         pipeline.process_fail("extract_transform")
         pipeline.process_fail("load")
