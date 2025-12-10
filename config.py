@@ -14,4 +14,4 @@ class Report_Config:
     }
 
     REPORT_FOLDER_PATH = "reports/"
-    REPORT_FILE_NAME = "etl_report_{}.csv"
+    REPORT_FILE_NAME = "etl_{}_report_{}.csv"
