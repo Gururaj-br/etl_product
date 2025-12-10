@@ -1,8 +1,7 @@
 import sys
 
-from duckdb import write_csv
-from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, OUTPUT_FILE
-from db import DBdb_connection
+from config import *
+from db import DBConnection
 from pipeline import Pipeline
 from engine.sql_engine import SqlEngine
 from engine.pandas_engine import PandasEngine
@@ -10,10 +9,17 @@ from reports.writer import ReportWriter
 
 def main():
     try:
-        db_conn = DBdb_connection(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT)
+        DB_HOST = DB_Config.DB_HOST
+        DB_USER = DB_Config.DB_USER
+        DB_PASSWORD = DB_Config.DB_PASSWORD
+        DB_NAME = DB_Config.DB_NAME
+        DB_PORT = DB_Config.DB_PORT
+
+        db_conn = DBConnection(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT)
     except Exception as e:
         print(f"Database db_connection error: {e}")
         sys.exit(1)
+        
     pipeline = Pipeline("customer_etl", db_conn)
     pipeline.start()
 

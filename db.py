@@ -13,3 +13,7 @@ class DBConnection:
         except pymysql.MySQLError as e:
             print(f"Error connecting to database: {e}")
             return None
+    
+    def close(self):
+        if self.connection:
+            self.connection.close()
